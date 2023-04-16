@@ -6,6 +6,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 
 
 @Entity
@@ -15,13 +17,21 @@ public class address {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private int id ;
 
+    @NotNull
+//    @NotBlank
     @JsonProperty("house")
     private int HouseNo;
     @JsonProperty("area")
+    @NotBlank
+    @NotNull
     private String Area;
     @JsonProperty("city")
+    @NotBlank
+    @NotNull
     private String City;
     @JsonProperty("state")
+    @NotBlank
+    @NotNull
     private String State;
 
     public int getId() {

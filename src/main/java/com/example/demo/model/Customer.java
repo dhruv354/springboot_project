@@ -3,6 +3,8 @@ package com.example.demo.model;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 
 //import javax.validation.constraints.Min;
 //import javax.validation.constraints.NotNull;
@@ -17,16 +19,21 @@ public class Customer {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private int id;
     @JsonProperty("phone")
-//    @Pattern(regexp="(^$|[0-9]{10})")
+    @NotNull
+//    @NotBlank
     @Column(unique=true)
 //    @Constraint(validatedBy = PhoneNumberValidator.class)
-    private int phoneNo;
+    private Long phoneNo;
     @JsonProperty("name")
+    @NotNull
+    @NotBlank
     private String customerName;
 
 
     @OneToMany(cascade = CascadeType.ALL)
     @JsonProperty("address")
+    @NotNull
+//    @NotBlank
     private List < address > Address;
 
 
@@ -38,11 +45,11 @@ public class Customer {
         this.id = id;
     }
 
-    public int getPhoneNo() {
+    public Long getPhoneNo() {
         return phoneNo;
     }
 
-    public void setPhoneNo(int phoneNo) {
+    public void setPhoneNo(Long phoneNo) {
         this.phoneNo = phoneNo;
     }
 

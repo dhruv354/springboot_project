@@ -4,6 +4,8 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import java.util.Date;
 import java.util.List;
 
@@ -18,21 +20,31 @@ public class Orders {
 
     @JsonProperty("user_id")
     @ManyToOne(cascade = CascadeType.ALL)
+    @NotNull
+    @NotBlank
     private Customer customer;
 
     @JsonProperty("date")
     @JsonFormat(pattern = "yyyy/MM/dd")
+    @NotNull
+//    @NotBlank
     private Date orderDate;
 
     @JsonProperty("order_amount")
+    @NotNull
+//    @NotBlank
     private int orderAmount;
 
     @ManyToOne(cascade = CascadeType.ALL)
     @JsonProperty("address")
+    @NotNull
+    @NotBlank
     private address Address;
 
     @ManyToMany(cascade = CascadeType.ALL)
     @JsonProperty("products")
+    @NotNull
+    @NotBlank
     private List<Products> products;
 
     public int getId() {

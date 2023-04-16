@@ -7,6 +7,7 @@ import com.example.demo.service.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -17,7 +18,7 @@ public class OrderResource {
     private OrderService orderService;
 
     @PostMapping
-    public Orders addOrder(@RequestBody OrderDTO order) throws Exception {
+    public Orders addOrder(@RequestBody @Valid OrderDTO order) throws Exception {
         System.out.println(order);
         return orderService.placeOrder(order);
     }

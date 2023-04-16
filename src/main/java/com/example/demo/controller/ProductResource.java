@@ -5,6 +5,7 @@ import com.example.demo.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -14,7 +15,7 @@ public class ProductResource {
     private ProductService productService;
 
     @PostMapping
-    public Products addProduct(@RequestBody Products product){
+    public Products addProduct(@RequestBody @Valid Products product){
         return productService.addProduct(product);
     }
     @GetMapping

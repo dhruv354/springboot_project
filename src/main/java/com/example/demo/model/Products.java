@@ -10,6 +10,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 //import jakarta.validation.constraints.Max;
 import javax.persistence.Id;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 
 @Entity
 public class Products {
@@ -20,18 +22,27 @@ public class Products {
 
 
     @JsonProperty("price")
+//    @NotNull
     private int price;
 
     @JsonProperty("name")
+    @NotNull
+    @NotBlank
     private String Name;
     @JsonProperty("color")
+    @NotNull
+    @NotBlank
     private String Color;
 
     @JsonProperty("type")
+    @NotNull
+    @NotBlank
     private String type;
 
 
     @JsonProperty("company")
+    @NotNull
+    @NotBlank
     private String Company;
 
     public int getId() {

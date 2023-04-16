@@ -1,8 +1,11 @@
 package com.example.demo.service;
 
 //import com.example.demo.exception.CustomerNotFoundException;
+import com.example.demo.controller.CustomerResource;
 import com.example.demo.model.Customer;
 import com.example.demo.dao.CustomerDAO;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
@@ -10,16 +13,28 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 @Component
 public class CustomerService {
-
+    Logger logger = LoggerFactory.getLogger(CustomerService.class);
     @Autowired
     private CustomerDAO customerDAO;
 
 
-    public Customer addCustomer(Customer customer_) {
-        return customerDAO.save(customer_);
+    public Customer addCustomer(Customer customer) throws Exception {
+//        Phone Number validation
+        String patterns
+                = "^(\\+\\d{1,3}( )?)?((\\(\\d{3}\\))|\\d{3})[- .]?\\d{3}[- .]?\\d{4}$"
+                + "|^(\\+\\d{1,3}( )?)?(\\d{3}[ ]?){2}\\d{3}$"
+                + "|^(\\+\\d{1,3}( )?)?(\\d{3}[ ]?)(\\d{2}[ ]?){2}\\d{2}$";
+        Pattern pattern = Pattern.compile(patterns);
+        Matcher matcher = pattern.matcher(Long.toString(customer.getPhoneNo()));
+        if(matcher.matches()){
+            return customerDAO.save(customer);
+        }
+        throw new Exception("this phone number id invalid");
     }
 
     public List<Customer> getCustomers() {
@@ -49,7 +64,7 @@ public class CustomerService {
         customerDAO.deleteAll();
     }
 
-    public Customer getCustomerByPhoneNumber(int phoneNo){
+    public Customer getCustomerByPhoneNumber(Long phoneNo){
         System.out.println("hello");
         List<Customer> allCustomers = customerDAO.findAll();
         System.out.println(phoneNo);
