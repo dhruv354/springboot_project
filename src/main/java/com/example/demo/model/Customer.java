@@ -19,23 +19,53 @@ public class Customer {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private int id;
     @JsonProperty("phone")
-    @NotNull
-//    @NotBlank
-    @Column(unique=true)
-//    @Constraint(validatedBy = PhoneNumberValidator.class)
-    private Long phoneNo;
-    @JsonProperty("name")
-    @NotNull
-    @NotBlank
-    private String customerName;
+    private String phone = "";
+    @JsonProperty("firstName")
+//    @NotNull
+    private String firstName = "";
+
+    private String username;
+
+    private String password;
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public List<Address> getAddress() {
+        return address;
+    }
+
+    @JsonProperty("lastName")
+    private String lastName = "";
+
+    private int age;
+
+    private String gender;
+
 
 
     @OneToMany(cascade = CascadeType.ALL)
     @JsonProperty("address")
-    @NotNull
+//    @NotNull
 //    @NotBlank
-    private List < address > Address;
+    private List<Address> address;
 
+    public void setAddress(List<Address> address) {
+        this.address = address;
+    }
 
     public int getId() {
         return id;
@@ -45,27 +75,43 @@ public class Customer {
         this.id = id;
     }
 
-    public Long getPhoneNo() {
-        return phoneNo;
+    public String getPhone() {
+        return phone;
     }
 
-    public void setPhoneNo(Long phoneNo) {
-        this.phoneNo = phoneNo;
+    public void setPhone(String phone) {
+        this.phone = phone;
     }
 
-    public String getCustomerName() {
-        return customerName;
+    public String getFirstName() {
+        return firstName;
     }
 
-    public void setCustomerName(String customerName) {
-        this.customerName = customerName;
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
     }
 
-    public List<address> getAddress() {
-        return Address;
+    public String getLastName() {
+        return lastName;
     }
 
-//    public void setAddress(int CustomerId, ) {
-//        Address = address;
-//    }
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
+
+    public int getAge() {
+        return age;
+    }
+
+    public void setAge(int age) {
+        this.age = age;
+    }
+
+    public String getGender() {
+        return gender;
+    }
+
+    public void setGender(String gender) {
+        this.gender = gender;
+    }
 }

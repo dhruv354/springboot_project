@@ -1,14 +1,11 @@
 package com.example.demo.service;
 
 import com.example.demo.constants.OrderAmountByYear;
-import com.example.demo.dao.CustomerDAO;
-import com.example.demo.dao.ProductDAO;
+import com.example.demo.dao.*;
 import com.example.demo.dto.OrderDTO;
-import com.example.demo.model.Customer;
+import com.example.demo.model.*;
 import com.example.demo.constants.OrderAmountByYear;
-import com.example.demo.model.Orders;
-import com.example.demo.dao.OrderDAO;
-import com.example.demo.model.Products;
+//import com.sun.org.apache.xpath.internal.operations.Bool;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -36,12 +33,18 @@ public class OrderService {
     @Autowired
     private ProductDAO productDAO;
 
+    @Autowired
+    private CartDAO cartDAO;
+    @Autowired
+    private ProductCartDAO productCartDAO;
+
     public Orders addOrder(Orders order) {
 
         return orderDAO.save(order);
     }
 
     public Orders placeOrder(OrderDTO order) throws Exception {
+
         Orders placedOrder = new Orders();
         int userId = order.getUserId();
         List<Integer> productIds = order.getProductIds();
@@ -89,8 +92,27 @@ public class OrderService {
         placedOrder.setOrderAmount(orderAmount);
         placedOrder.setCustomer(customer);
         placedOrder.setProducts(validProducts);
-        placedOrder.setAddress(placedOrder.getAddress());
+        placedOrder.setShippingAddress(order.getShippingAddress());
         placedOrder.setOrderDate(date);
+
+        //remove product from the cart
+        Cart cart = cartDAO.findByCustomer(optionalCustomer.get());
+        List<ProductCart> productCart = cart.getProduct();
+        HashMap<Integer, Boolean> mp = new HashMap<Integer,Boolean>();
+        for(int i = 0;i < order.getProductIds().size();i++){
+            mp.put(order.getProductIds().get(i), true);
+        }
+        List<ProductCart> newProductCartArr = new ArrayList<>();
+        for(int i = 0;i < productCart.size();i++){
+            Products product = productCart.get(i).getProduct();
+            System.out.println(product.getId());
+//            System.o
+            if(mp.containsKey(product.getId())) {
+                System.out.println("here");
+                productCartDAO.deleteById(productCart.get(i).getId());
+//                productCartDAO.save();
+            }
+        }
         return orderDAO.save(placedOrder);
     }
 

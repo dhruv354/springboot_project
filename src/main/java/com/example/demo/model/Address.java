@@ -1,5 +1,6 @@
 package com.example.demo.model;
 
+import com.example.demo.dto.CoordinateDTO;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import javax.persistence.Entity;
@@ -11,28 +12,36 @@ import javax.validation.constraints.NotNull;
 
 
 @Entity
-public class address {
+public class Address {
     @Id
     @JsonProperty("id")
     @GeneratedValue(strategy = GenerationType.AUTO)
     private int id ;
 
-    @NotNull
+//    @NotNull
 //    @NotBlank
     @JsonProperty("house")
-    private int HouseNo;
+    private int houseNo = 0;
     @JsonProperty("area")
-    @NotBlank
-    @NotNull
-    private String Area;
+//    @NotNull
+    private String area = "";
     @JsonProperty("city")
-    @NotBlank
-    @NotNull
-    private String City;
+//    @NotNull
+    private String city = "";
     @JsonProperty("state")
-    @NotBlank
-    @NotNull
-    private String State;
+//    @NotNull
+    private String state = "";
+
+//    @JsonProperty("coordinates")
+//    private CoordinateDTO coordinates;
+//
+//    public CoordinateDTO getCoordinates() {
+//        return coordinates;
+//    }
+//
+//    public void setCoordinates(CoordinateDTO coordinates) {
+//        this.coordinates = coordinates;
+//    }
 
     public int getId() {
         return id;
@@ -43,45 +52,42 @@ public class address {
     }
 
     public int getHouseNo() {
-        return HouseNo;
+        return houseNo;
     }
 
     public void setHouseNo(int houseNo) {
-        HouseNo = houseNo;
+        this.houseNo = houseNo;
     }
 
     public String getArea() {
-        return Area;
+        return area;
     }
 
     public void setArea(String area) {
-        Area = area;
+        this.area = area;
     }
 
+//    public String getSity() {
+//        return sity;
+//    }
+
+//    public void setSity(String sity) {
+//        this.sity = sity;
+//    }
+
     public String getCity() {
-        return City;
+        return city;
     }
 
     public void setCity(String city) {
-        City = city;
+        this.city = city;
     }
 
     public String getState() {
-        return State;
+        return state;
     }
 
     public void setState(String state) {
-        State = state;
+        this.state = state;
     }
-
-    public int getPinCode() {
-        return pinCode;
-    }
-
-    public void setPinCode(int pinCode) {
-        this.pinCode = pinCode;
-    }
-
-    @JsonProperty("pincode")
-    private int pinCode;
 }

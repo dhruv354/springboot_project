@@ -4,25 +4,23 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 import javax.persistence.*;
 import javax.validation.constraints.Min;
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import java.util.List;
 
+@Entity
 public class Cart {
     @Id
     @JsonProperty("id")
     @GeneratedValue(strategy = GenerationType.AUTO)
     private int id;
 
-    @ManyToOne
-    @NotNull
+    @OneToOne (cascade =  CascadeType.ALL)
+
     private  Customer customer;
 
-    @ManyToMany
-    @NotNull
-    private Products product;
-
-    @NotNull
-    @Min(0)
-    private int quantity;
+    @ManyToMany(cascade = CascadeType.ALL)
+    private List<ProductCart> product;
 
     public int getId() {
         return id;
@@ -40,19 +38,11 @@ public class Cart {
         this.customer = customer;
     }
 
-    public Products getProduct() {
+    public List<ProductCart> getProduct() {
         return product;
     }
 
-    public void setProduct(Products product) {
+    public void setProduct(List<ProductCart> product) {
         this.product = product;
-    }
-
-    public int getQuantity() {
-        return quantity;
-    }
-
-    public void setQuantity(int quantity) {
-        this.quantity = quantity;
     }
 }

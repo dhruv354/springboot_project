@@ -1,6 +1,6 @@
 package com.example.demo.dto;
 
-import com.example.demo.model.address;
+import com.example.demo.model.Address;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 
@@ -10,8 +10,8 @@ import java.util.List;
 public class OrderDTO {
     @JsonProperty("user_id")
     private int userId;
-    @JsonProperty("address")
-    private address shippingAddress;
+    @JsonProperty("shipping_address")
+    private Address shippingAddress;
     @JsonProperty("product_ids")
     private List<Integer> productIds;
 
@@ -23,11 +23,11 @@ public class OrderDTO {
         this.userId = userId;
     }
 
-    public address getShippingAddress() {
+    public Address getShippingAddress() {
         return shippingAddress;
     }
 
-    public void setShippingAddress(address shippingAddress) {
+    public void setShippingAddress(Address shippingAddress) {
         this.shippingAddress = shippingAddress;
     }
 
