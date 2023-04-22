@@ -43,7 +43,7 @@ public class Orders {
 
 
 
-    @ManyToMany(cascade = CascadeType.ALL)
+    @ManyToMany(cascade = CascadeType.PERSIST)
     @JsonProperty("products")
 //    @NotNull
 //    @NotBlank

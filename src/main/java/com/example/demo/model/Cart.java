@@ -15,7 +15,7 @@ public class Cart {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private int id;
 
-    @OneToOne (cascade =  CascadeType.ALL)
+    @OneToOne (cascade =  CascadeType.PERSIST)
 
     private  Customer customer;
 
