@@ -1,6 +1,7 @@
 package com.example.demo.service;
 
 //import com.example.demo.exception.CustomerNotFoundException;
+import com.example.demo.MyExceptions.CustomerExceptions.CustomerNotFoundException;
 import com.example.demo.dto.ResponseListUserDTO;
 import com.example.demo.dto.UserDTO;
 import com.example.demo.model.Customer;
@@ -43,19 +44,18 @@ public class CustomerService {
 //        if (matcher.matches()) {
             return customerDAO.save(customer);
 ////        }
-//        throw new Exception("this phone number id invalid");
     }
 
     public List<Customer> getCustomers() {
         return customerDAO.findAll();
     }
 
-    public Customer getCustomer(int customerId) {
+    public Customer getCustomer(int customerId) throws CustomerNotFoundException{
 
         Optional<Customer> optionalCustomer = customerDAO.findById(customerId);
 
         if (!optionalCustomer.isPresent())
-            return null;
+            throw new CustomerNotFoundException("customer with id does not exist");
 
 
         return optionalCustomer.get();
@@ -66,7 +66,11 @@ public class CustomerService {
         return customerDAO.save(customer_);
     }
 
-    public void deleteCustomer(int customerId) {
+    public void deleteCustomer(int customerId) throws CustomerNotFoundException {
+        Optional<Customer> optionalCustomer = customerDAO.findById(customerId);
+        if(!optionalCustomer.isPresent()){
+            throw new CustomerNotFoundException("user with id: " + customerId + " does not exist");
+        }
         customerDAO.deleteById(customerId);
     }
 
@@ -74,18 +78,16 @@ public class CustomerService {
         customerDAO.deleteAll();
     }
 
-    public Customer getCustomerByPhoneNumber(String phoneNo) {
-        System.out.println("hello");
+    public Customer getCustomerByPhoneNumber(String phoneNo) throws CustomerNotFoundException{
         List<Customer> allCustomers = customerDAO.findAll();
         System.out.println(phoneNo);
         for (int i = 0; i < allCustomers.size(); i++) {
             Customer tempCustomer = allCustomers.get(i);
-            System.out.println(tempCustomer.getPhone());
             if (tempCustomer.getPhone() == phoneNo) {
                 return tempCustomer;
             }
         }
-        throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+        throw new CustomerNotFoundException("customer with this number " + phoneNo + " does not exist");
     }
 
     public List<Customer> getGithubCustomers() {
@@ -127,7 +129,12 @@ public class CustomerService {
         return output;
     }
 
-    public List<Customer> findCustomerLikeUsername(String username){
-        return customerDAO.findUsingUserName(username);
+    public List<Customer> findCustomerLikeUsername(String username) throws CustomerNotFoundException{
+        try {
+            return customerDAO.findUsingUserName(username);
+        }
+        catch(CustomerNotFoundException customerNotFoundException){
+            throw new CustomerNotFoundException("customer with username: " + username + " does not exist");
+        }
     }
 }

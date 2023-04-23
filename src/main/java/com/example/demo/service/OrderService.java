@@ -1,5 +1,7 @@
 package com.example.demo.service;
 
+import com.example.demo.MyExceptions.CustomerExceptions.CustomerNotFoundException;
+import com.example.demo.MyExceptions.ProductExceptions.ProductNotFoundException;
 import com.example.demo.constants.OrderAmountByYear;
 import com.example.demo.dao.*;
 import com.example.demo.dto.OrderDTO;
@@ -58,7 +60,7 @@ public class OrderService {
             System.out.println("here1");
 //            throw new ResponseStatusException(
 //                    HttpStatus.NOT_FOUND, "User with this id does not exist");
-            throw new Exception("User with this id does not exist");
+            throw new CustomerNotFoundException("customer with id does not exist, " + userId);
         }
         Customer customer = optionalCustomer.get();
         //check all Product Id
@@ -69,8 +71,7 @@ public class OrderService {
             Optional<Products> optionalProduct = productDAO.findById(productIds.get(i));
 
             if(!optionalProduct.isPresent())
-                throw new ResponseStatusException(
-                        HttpStatus.NOT_FOUND, "product with id " +   productIds.get(i) + "does not exist");
+                throw new ProductNotFoundException("product with this does id does not exist");
             Products product = optionalProduct.get();
             validProducts.add(product);
             orderAmount += product.getPrice();
@@ -124,7 +125,7 @@ public class OrderService {
     public List<Orders> getOrders(int user_id) throws Exception {
         Optional<Customer> customer = customerDAO.findById(user_id);
         if(!customer.isPresent()){
-            throw new Exception("user with id does not exist");
+            throw new CustomerNotFoundException("customer with id does not exist");
         }
         List<Orders> orders = orderDAO.findByCustomer(customer.get());
         return orders;
@@ -133,7 +134,7 @@ public class OrderService {
     public List<Orders> getOrders2(int user_id, Pageable paging) throws Exception {
         Optional<Customer> customer = customerDAO.findById(user_id);
         if(!customer.isPresent()){
-            throw new Exception("user with id does not exist");
+            throw new CustomerNotFoundException("customer with this id does not exist");
         }
         System.out.println("inside get Orders2 function");
         List<Orders> orders = orderDAO.findByCustomerOrderByOrderDateDesc(customer.get(), paging);
