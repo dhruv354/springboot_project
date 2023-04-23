@@ -19,13 +19,17 @@ public class Customer {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private int id;
     @JsonProperty("phone")
-    private String phone = "";
+    @NotNull
+    private String phone;
     @JsonProperty("firstName")
+    @NotNull
 //    @NotNull
-    private String firstName = "";
+    private String firstName;
 
+    @NotNull
     private String username;
 
+    @NotNull
     private String password;
 
     public String getUsername() {
@@ -51,8 +55,10 @@ public class Customer {
     @JsonProperty("lastName")
     private String lastName = "";
 
+    @NotNull
     private int age;
 
+    @NotNull
     private String gender;
 
 

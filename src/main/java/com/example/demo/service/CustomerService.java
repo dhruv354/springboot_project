@@ -17,12 +17,13 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.server.ResponseStatusException;
-//import sun.jvm.hotspot.debugger.Address;
 
 import javax.sound.midi.SysexMessage;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 @Component
 public class CustomerService {
@@ -38,10 +39,10 @@ public class CustomerService {
 //                + "|^(\\+\\d{1,3}( )?)?(\\d{3}[ ]?){2}\\d{3}$"
 //                + "|^(\\+\\d{1,3}( )?)?(\\d{3}[ ]?)(\\d{2}[ ]?){2}\\d{2}$";
 //        Pattern pattern = Pattern.compile(patterns);
-//        Matcher matcher = pattern.matcher(Long.toString(customer.getPhoneNo()));
+//        Matcher matcher = pattern.matcher((customer.getPhone()));
 //        if (matcher.matches()) {
             return customerDAO.save(customer);
-//        }
+////        }
 //        throw new Exception("this phone number id invalid");
     }
 
@@ -115,48 +116,10 @@ public class CustomerService {
             List<Address> address = new ArrayList<>();
             address.add(givenCustomer.getAddress());
             currentCustomer.setAddress(address);
-            currentCustomer = body.getResponseListUserDTO().get(i).convert
-
             customerList.add(currentCustomer);
         }
         customerDAO.saveAll(customerList);
         return customerList;
-
-//        JSONObject jsonObject = new JSONObject(body);
-//
-//        JSONArray users = (JSONArray)jsonObject.get("users");
-//        for(int i = 0;i < users.length();i++){
-//            JSONObject user = (JSONObject) users.get(i);
-//            System.out.println(user);
-//            Customer customer = new Customer();
-//            try {
-//                if(user.has("firstName") && user.has("lastName"))
-//                    customer.setCustomerName(user.get("firstName") + " " + user.get("lastName"));
-//                if(user.has("phone"))
-//                    customer.setPhoneNo((String)user.get("phone"));
-//                Address add = new Address();
-//                if(user.has("address")) {
-//                    JSONObject userAddress = (JSONObject) user.get("address");
-//                    if(userAddress.has("address"))
-//                        add.setArea((String) userAddress.get("address"));
-//                    if(userAddress.has("city"))
-//                        add.setCity((String) userAddress.get("city"));
-//                    if(userAddress.has("state"))
-//                        add.setState((String) userAddress.get("state"));
-//                    if(user.has("postalCode"))
-//                        add.setPinCode(Integer.parseInt((String) userAddress.get("postalCode")));
-//                }
-//                List<Address> tmp = new ArrayList<>();
-//                tmp.add(add);
-//                customer.setAddress(tmp);
-//                customerDAO.save(customer);
-//            }
-//            catch(Exception e){
-//                System.out.println(e);
-//                throw e;
-//            }
-//        }
-//        return null;
     }
 
     public List<Customer> getCustomerUsingLoginName(String username){

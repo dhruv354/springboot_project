@@ -18,17 +18,21 @@ public class Address {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private int id ;
 
-//    @NotNull
+    @NotNull
 //    @NotBlank
     @JsonProperty("house")
-    private int houseNo = 0;
+    private int houseNo;
+
+    @NotNull
     @JsonProperty("area")
 //    @NotNull
-    private String area = "";
+    private String area;
     @JsonProperty("city")
+    @NotNull
 //    @NotNull
     private String city = "";
     @JsonProperty("state")
+    @NotNull
 //    @NotNull
     private String state = "";
 

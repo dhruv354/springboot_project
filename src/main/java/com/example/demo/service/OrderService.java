@@ -6,8 +6,10 @@ import com.example.demo.dto.OrderDTO;
 import com.example.demo.model.*;
 import com.example.demo.constants.OrderAmountByYear;
 //import com.sun.org.apache.xpath.internal.operations.Bool;
+import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
@@ -17,13 +19,13 @@ import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
-import java.util.logging.Logger;
+//import java.util.logging.Logger;
 
 
 @Service
 public class OrderService {
 
-//    Logger logger = (Logger) LoggerFactory.getLogger(OrderService.class);
+    Logger logger =  LoggerFactory.getLogger(OrderService.class);
     @Autowired
     private OrderDAO orderDAO;
 
@@ -97,27 +99,45 @@ public class OrderService {
 
         //remove product from the cart
         Cart cart = cartDAO.findByCustomer(optionalCustomer.get());
+        if(cart == null){
+            return orderDAO.save(placedOrder);
+        }
         List<ProductCart> productCart = cart.getProduct();
         HashMap<Integer, Boolean> mp = new HashMap<Integer,Boolean>();
         for(int i = 0;i < order.getProductIds().size();i++){
             mp.put(order.getProductIds().get(i), true);
         }
+        System.out.println(mp.size());
         List<ProductCart> newProductCartArr = new ArrayList<>();
         for(int i = 0;i < productCart.size();i++){
             Products product = productCart.get(i).getProduct();
             System.out.println(product.getId());
 //            System.o
-            if(mp.containsKey(product.getId())) {
-                System.out.println("here");
-                productCartDAO.deleteById(productCart.get(i).getId());
-//                productCartDAO.save();
+            if(!mp.containsKey(product.getId())) {
+                throw new Exception("all products mentioned in the cart are not being ordered");
             }
         }
+        cartDAO.delete(cart);
         return orderDAO.save(placedOrder);
     }
 
-    public List<Orders> getOrders(){
-        return orderDAO.findAll();
+    public List<Orders> getOrders(int user_id) throws Exception {
+        Optional<Customer> customer = customerDAO.findById(user_id);
+        if(!customer.isPresent()){
+            throw new Exception("user with id does not exist");
+        }
+        List<Orders> orders = orderDAO.findByCustomer(customer.get());
+        return orders;
+    }
+
+    public List<Orders> getOrders2(int user_id, Pageable paging) throws Exception {
+        Optional<Customer> customer = customerDAO.findById(user_id);
+        if(!customer.isPresent()){
+            throw new Exception("user with id does not exist");
+        }
+        System.out.println("inside get Orders2 function");
+        List<Orders> orders = orderDAO.findByCustomerOrderByOrderDateDesc(customer.get(), paging);
+        return orders;
     }
 
     public List<OrderAmountByYear> getOrderAmountByYear(int givenYear){
