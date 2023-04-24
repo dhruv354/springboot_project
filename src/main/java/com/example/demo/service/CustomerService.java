@@ -1,6 +1,7 @@
 package com.example.demo.service;
 
 //import com.example.demo.exception.CustomerNotFoundException;
+import com.example.demo.MyExceptions.CustomerExceptions.CustomerAlreadyExistsException;
 import com.example.demo.MyExceptions.CustomerExceptions.CustomerNotFoundException;
 import com.example.demo.dto.ResponseListUserDTO;
 import com.example.demo.dto.UserDTO;
@@ -33,17 +34,12 @@ public class CustomerService {
     private CustomerDAO customerDAO;
 
 
-    public Customer addCustomer(Customer customer)  {
-//        Phone Number validation
-//        String patterns
-//                = "^(\\+\\d{1,3}( )?)?((\\(\\d{3}\\))|\\d{3})[- .]?\\d{3}[- .]?\\d{4}$"
-//                + "|^(\\+\\d{1,3}( )?)?(\\d{3}[ ]?){2}\\d{3}$"
-//                + "|^(\\+\\d{1,3}( )?)?(\\d{3}[ ]?)(\\d{2}[ ]?){2}\\d{2}$";
-//        Pattern pattern = Pattern.compile(patterns);
-//        Matcher matcher = pattern.matcher((customer.getPhone()));
-//        if (matcher.matches()) {
-            return customerDAO.save(customer);
-////        }
+    public Customer addCustomer(Customer customer)  throws CustomerAlreadyExistsException{
+        Customer optionalCustomer = customerDAO.findByUsername(customer.getUsername());
+        if(optionalCustomer != null){
+            throw new CustomerAlreadyExistsException("Customer already exists with this username, try a different username");
+        }
+        return customerDAO.save(customer);
     }
 
     public List<Customer> getCustomers() {

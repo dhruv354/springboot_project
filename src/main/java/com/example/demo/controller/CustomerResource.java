@@ -1,5 +1,6 @@
 package com.example.demo.controller;
 
+import com.example.demo.MyExceptions.CustomerExceptions.CustomerAlreadyExistsException;
 import com.example.demo.MyExceptions.CustomerExceptions.CustomerNotFoundException;
 import com.example.demo.dao.CustomerDAO;
 import com.example.demo.model.Customer;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping(value = "/customers")
@@ -28,9 +30,14 @@ public class CustomerResource {
     private CustomerDAO customerDAO;
 
     @PostMapping
-        public Customer addCustomer(@RequestBody @Valid  Customer customer_)  {
+        public ResponseEntity addCustomer(@RequestBody @Valid  Customer customer)  throws CustomerAlreadyExistsException {
             logger.info("adding customers");
-            return customerService.addCustomer(customer_);
+            try{
+                return new ResponseEntity(customerService.addCustomer(customer), HttpStatus.CREATED);
+            }
+            catch (CustomerAlreadyExistsException e){
+                return new ResponseEntity(e.getMessage(), HttpStatus.FORBIDDEN);
+            }
         }
 
         @GetMapping

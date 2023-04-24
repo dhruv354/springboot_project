@@ -13,8 +13,10 @@ public interface CustomerDAO extends JpaRepository<Customer, Integer> {
     @Override
     List<Customer> findAll();
 
-    public List<Customer> findByUsername(String username);
+    public Customer findByUsername(String username);
 
     @Query("from Customer c where c.username like ?1%")
     public List<Customer> findUsingUserName(String name);
+
+
 }
