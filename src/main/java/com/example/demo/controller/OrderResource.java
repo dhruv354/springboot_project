@@ -1,18 +1,21 @@
 package com.example.demo.controller;
 
+import com.example.demo.MyExceptions.CustomerExceptions.CustomerNotFoundException;
+import com.example.demo.MyExceptions.ProductExceptions.ProductNotFoundException;
 import com.example.demo.constants.OrderAmountByYear;
 import com.example.demo.dto.OrderDTO;
-import com.example.demo.model.Cart;
 import com.example.demo.model.Orders;
-import com.example.demo.model.Products;
 import com.example.demo.service.CartService;
 import com.example.demo.service.OrderService;
+import org.json.HTTP;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -32,15 +35,21 @@ public class OrderResource {
     private CartService cartService;
 
     @PostMapping
-    public Orders addOrder(@RequestBody OrderDTO order) throws Exception {
+    public ResponseEntity addOrder(@RequestBody OrderDTO order) throws Exception, CustomerNotFoundException, ProductNotFoundException {
         System.out.println(order);
         List<Integer> products = order.getProductIds();
-        int userId = order.getUserId();
-//        for(int i = 0;i < products.size();i++){
-//            Optional<Cart> optionalCart = new Cart();
-//            for
-//        }
-        return orderService.placeOrder(order);
+        try{
+            return new ResponseEntity(orderService.placeOrder(order), HttpStatus.OK);
+        }
+        catch(CustomerNotFoundException c){
+            return new ResponseEntity<>(c.getMessage(), HttpStatus.NOT_FOUND);
+        }
+        catch(ProductNotFoundException p){
+            return new ResponseEntity(p.getMessage(), HttpStatus.NOT_FOUND);
+        }
+        catch(Exception e){
+            return new ResponseEntity(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
     }
 
     //sorting by orders and pagination
@@ -50,7 +59,7 @@ public class OrderResource {
     }
 
     @GetMapping(value = "/sorted_orders")
-    public List<Orders> getOrders2(
+    public ResponseEntity getOrders2(
             @RequestParam(name = "user_id") int user_id,
             @RequestParam(name = "page") int page,
             @RequestParam(name = "size") int size
@@ -58,9 +67,9 @@ public class OrderResource {
         logger.info("inside get orders class");
         try {
             Pageable pagingSort = PageRequest.of(page, size);
-            return orderService.getOrders2(user_id, pagingSort);
-        } catch (Exception e) {
-            throw new Exception(e);
+            return new ResponseEntity(orderService.getOrders2(user_id, pagingSort), HttpStatus.OK);
+        } catch (CustomerNotFoundException e) {
+            return new ResponseEntity(e.getMessage(), HttpStatus.NOT_FOUND);
         }
     }
 

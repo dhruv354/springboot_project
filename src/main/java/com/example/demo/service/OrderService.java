@@ -47,7 +47,7 @@ public class OrderService {
         return orderDAO.save(order);
     }
 
-    public Orders placeOrder(OrderDTO order) throws Exception {
+    public Orders placeOrder(OrderDTO order) throws Exception, CustomerNotFoundException, ProductNotFoundException {
 
         Orders placedOrder = new Orders();
         int userId = order.getUserId();
@@ -89,9 +89,6 @@ public class OrderService {
         catch(Exception e){
             System.out.println(e);
         }
-//        logger.info("An INFO Message: " + date.toString());
-        System.out.println("curyear: " + date.getYear());
-        System.out.println("cur month: " + date.getMonth());
         placedOrder.setOrderAmount(orderAmount);
         placedOrder.setCustomer(customer);
         placedOrder.setProducts(validProducts);
@@ -112,8 +109,6 @@ public class OrderService {
         List<ProductCart> newProductCartArr = new ArrayList<>();
         for(int i = 0;i < productCart.size();i++){
             Products product = productCart.get(i).getProduct();
-            System.out.println(product.getId());
-//            System.o
             if(!mp.containsKey(product.getId())) {
                 throw new Exception("all products mentioned in the cart are not being ordered");
             }
@@ -131,7 +126,7 @@ public class OrderService {
         return orders;
     }
 
-    public List<Orders> getOrders2(int user_id, Pageable paging) throws Exception {
+    public List<Orders> getOrders2(int user_id, Pageable paging) throws Exception{
         Optional<Customer> customer = customerDAO.findById(user_id);
         if(!customer.isPresent()){
             throw new CustomerNotFoundException("customer with this id does not exist");
