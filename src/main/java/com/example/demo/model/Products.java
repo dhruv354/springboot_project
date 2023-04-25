@@ -23,12 +23,12 @@ public class Products {
 
 
     @JsonProperty("price")
-//    @NotNull
+    @NotNull
     private int price;
 
     @JsonProperty("name")
-//    @NotNull
-//    @NotBlank
+    @NotNull
+    @NotBlank
     private String Name;
     @JsonProperty("color")
     @NotNull

@@ -120,9 +120,9 @@ public class CustomerService {
         return customerList;
     }
 
-    public List<Customer> getCustomerUsingLoginName(String username){
-        List<Customer> output = customerDAO.findByUsername(username);
-        return output;
+    public Customer getCustomerUsingLoginName(String username){
+        Customer customer = customerDAO.findByUsername(username);
+        return customer;
     }
 
     public List<Customer> findCustomerLikeUsername(String username) throws CustomerNotFoundException{

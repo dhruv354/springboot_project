@@ -22,9 +22,9 @@ public class ApplicationExceptionHandler {
         return errorMap;
     }
 
-    @ExceptionHandler(Exception.class)
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public String generalExceptionHandler(Exception e){
-        return e.getMessage();
-    }
+//    @ExceptionHandler(Exception.class)
+//    @ResponseStatus(HttpStatus.BAD_REQUEST)
+//    public String generalExceptionHandler(Exception e){
+//        return e.getMessage();
+//    }
 }

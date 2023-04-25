@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import org.hibernate.engine.internal.Cascade;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.util.List;
 
 @Entity
@@ -17,6 +18,7 @@ public class ProductCart
     @ManyToOne(cascade = CascadeType.PERSIST)
     private Products product;
 
+    @NotNull
     private int quantity;
 
     public int getId() {
