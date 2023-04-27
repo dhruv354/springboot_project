@@ -20,7 +20,6 @@ public class ProductResource {
     }
     @GetMapping
     public List<Products> getProducts() {
-        System.out.println("inside get Products");
         return productService.getProducts();
     }
 }

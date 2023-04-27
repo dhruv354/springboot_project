@@ -7,7 +7,6 @@ import com.example.demo.dao.*;
 import com.example.demo.dto.OrderDTO;
 import com.example.demo.model.*;
 import com.example.demo.constants.OrderAmountByYear;
-//import com.sun.org.apache.xpath.internal.operations.Bool;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -58,15 +57,12 @@ public class OrderService {
         System.out.println(optionalCustomer);
         if(!optionalCustomer.isPresent()) {
             System.out.println("here1");
-//            throw new ResponseStatusException(
-//                    HttpStatus.NOT_FOUND, "User with this id does not exist");
             throw new CustomerNotFoundException("customer with id does not exist, " + userId);
         }
         Customer customer = optionalCustomer.get();
         //check all Product Id
         List<Products>validProducts = new ArrayList<>();
         int orderAmount = 0;
-        System.out.println("here2");
         for(int i = 0;i < productIds.size();i++){
             Optional<Products> optionalProduct = productDAO.findById(productIds.get(i));
 
@@ -126,12 +122,11 @@ public class OrderService {
         return orders;
     }
 
-    public List<Orders> getOrders2(int user_id, Pageable paging) throws Exception{
+    public List<Orders> getOrders2(int user_id, Pageable paging) throws CustomerNotFoundException{
         Optional<Customer> customer = customerDAO.findById(user_id);
         if(!customer.isPresent()){
             throw new CustomerNotFoundException("customer with this id does not exist");
         }
-        System.out.println("inside get Orders2 function");
         List<Orders> orders = orderDAO.findByCustomerOrderByOrderDateDesc(customer.get(), paging);
         return orders;
     }

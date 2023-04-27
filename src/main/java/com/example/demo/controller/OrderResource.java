@@ -75,7 +75,6 @@ public class OrderResource {
 
     @GetMapping(value = "/{year}")
     public List<OrderAmountByYear> getOrderAmountByYear(@PathVariable("year") int year){
-        System.out.println(year);
         return orderService.getOrderAmountByYear(year);
     }
 }

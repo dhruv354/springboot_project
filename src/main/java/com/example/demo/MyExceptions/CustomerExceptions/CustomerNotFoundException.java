@@ -12,7 +12,6 @@ public class CustomerNotFoundException extends DemoException {
     public CustomerNotFoundException(String message){
         super(message);
         this.message = message;
-        logger.error("Error in Customer class, it is giving customer Not found exception");
     }
     public CustomerNotFoundException(){
 
