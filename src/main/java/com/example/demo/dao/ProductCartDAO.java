@@ -13,7 +13,4 @@ import java.util.List;
 public interface ProductCartDAO extends JpaRepository<ProductCart, Integer> {
     @Override
     List<ProductCart> findAll();
-//    public ProductDAO findByProductAndByQuantity(Products product, int quantity);
-//    @Query("delete * from  ProductCart pc where pc.id = :id")
-//    public void customDeleteById(int id);
 }

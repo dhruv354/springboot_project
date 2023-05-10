@@ -36,7 +36,6 @@ public class OrderResource {
 
     @PostMapping
     public ResponseEntity addOrder(@RequestBody OrderDTO order) throws Exception, CustomerNotFoundException, ProductNotFoundException {
-        System.out.println(order);
         List<Integer> products = order.getProductIds();
         return new ResponseEntity(orderService.placeOrder(order), HttpStatus.OK);
     }

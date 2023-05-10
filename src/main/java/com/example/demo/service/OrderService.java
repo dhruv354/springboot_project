@@ -6,21 +6,15 @@ import com.example.demo.constants.OrderAmountByYear;
 import com.example.demo.dao.*;
 import com.example.demo.dto.OrderDTO;
 import com.example.demo.model.*;
-import com.example.demo.constants.OrderAmountByYear;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
-import org.springframework.http.HttpStatus;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
-import org.springframework.web.server.ResponseStatusException;
-
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
-//import java.util.logging.Logger;
 
 
 @Service
@@ -54,9 +48,7 @@ public class OrderService {
 
         //Check if user exists else throw exception
         Optional<Customer> optionalCustomer = customerDAO.findById(userId);
-        System.out.println(optionalCustomer);
         if(!optionalCustomer.isPresent()) {
-            System.out.println("here1");
             throw new CustomerNotFoundException("customer with id does not exist, " + userId);
         }
         Customer customer = optionalCustomer.get();
@@ -76,14 +68,13 @@ public class OrderService {
         DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd");
         LocalDateTime now = LocalDateTime.now();
         String curTime = dtf.format(now);
-        System.out.println(curTime);
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy/MM/dd");
         Date date = new Date();
         try {
             date = formatter.parse(curTime);
         }
         catch(Exception e){
-            System.out.println(e);
+            logger.info(e.getMessage());
         }
         placedOrder.setOrderAmount(orderAmount);
         placedOrder.setCustomer(customer);
@@ -101,7 +92,6 @@ public class OrderService {
         for(int i = 0;i < order.getProductIds().size();i++){
             mp.put(order.getProductIds().get(i), true);
         }
-        System.out.println(mp.size());
         List<ProductCart> newProductCartArr = new ArrayList<>();
         for(int i = 0;i < productCart.size();i++){
             Products product = productCart.get(i).getProduct();
@@ -134,14 +124,11 @@ public class OrderService {
     public List<OrderAmountByYear> getOrderAmountByYear(int givenYear){
         Dictionary<Integer, Integer> dict= new Hashtable<>();
         List<Orders> orders = orderDAO.findAll();
-        System.out.println(orders.size());
         for(int i = 0;i < orders.size();i++){
             Orders currentOrder = orders.get(i);
             int year = currentOrder.getOrderDate().getYear() + 1900;
             int month = currentOrder.getOrderDate().getMonth() + 1;
             int orderAmount = currentOrder.getOrderAmount();
-            System.out.println("year: " + year );
-            System.out.println("month: " + month);
             if(year == givenYear){
                 int prevVal = 0;
                 if(dict.get(month) == null){
@@ -160,8 +147,6 @@ public class OrderService {
         while (keys.hasMoreElements()) {
              int key = keys.nextElement();
              int key_value = dict.get(key);
-             System.out.println(key);
-             System.out.println(key_value);
              OrderAmountByYear current = new OrderAmountByYear();
              current.setOrderAmount(key_value);
              current.setMonth(key);

@@ -14,6 +14,5 @@ import java.util.List;
 public interface OrderDAO extends JpaRepository<Orders, Integer> {
 
     public List<Orders> findByCustomer(Customer customer);
-//    @Query("from Orders order where ")
     public List<Orders> findByCustomerOrderByOrderDateDesc(Customer customer, Pageable paging);
 }

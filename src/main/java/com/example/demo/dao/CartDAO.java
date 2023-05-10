@@ -12,8 +12,5 @@ import java.util.List;
 public interface CartDAO extends JpaRepository<Cart, Integer> {
     @Override
     List<Cart> findAll();
-
-//    public Cart findByCustomerAndProduct(Customer customer, Products product);
     public Cart findByCustomer(Customer customer);
-//    public Cart findByCustomerAndByProduct(Customer customer, Product)
 }

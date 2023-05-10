@@ -1,7 +1,5 @@
 package com.example.demo.service;
-
 import com.example.demo.MyExceptions.CartExceptions.CartAlreadyExistsException;
-import com.example.demo.MyExceptions.CustomerExceptions.CustomerAlreadyExistsException;
 import com.example.demo.MyExceptions.CustomerExceptions.CustomerNotFoundException;
 import com.example.demo.MyExceptions.ProductExceptions.ProductNotFoundException;
 import com.example.demo.dao.CartDAO;
@@ -16,10 +14,7 @@ import com.example.demo.model.Products;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.expression.spel.ast.NullLiteral;
 import org.springframework.stereotype.Service;
-
-import javax.validation.constraints.Null;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
