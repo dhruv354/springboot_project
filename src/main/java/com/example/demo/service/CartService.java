@@ -1,5 +1,9 @@
 package com.example.demo.service;
 
+import com.example.demo.MyExceptions.CartExceptions.CartAlreadyExistsException;
+import com.example.demo.MyExceptions.CustomerExceptions.CustomerAlreadyExistsException;
+import com.example.demo.MyExceptions.CustomerExceptions.CustomerNotFoundException;
+import com.example.demo.MyExceptions.ProductExceptions.ProductNotFoundException;
 import com.example.demo.dao.CartDAO;
 import com.example.demo.dao.CustomerDAO;
 import com.example.demo.dao.ProductCartDAO;
@@ -35,18 +39,15 @@ public class CartService {
     @Autowired
     private ProductCartDAO productCartDAO;
 
-    public Cart addProduct(CartDTO cartDTO) throws Exception {
+    public Cart addProduct(CartDTO cartDTO) throws CustomerNotFoundException, ProductNotFoundException, CartAlreadyExistsException {
         Cart newCart = new Cart();
-//        return newCart;
-
-
         logger.info("inside addProduct function");
 
         logger.info("checking customer with id");
         int user_id = cartDTO.getUser_id();
         Optional<Customer> optionalCustomer = customerDAO.findById(user_id);
         if(!optionalCustomer.isPresent()) {
-            throw new Exception("User with this id does not exist");
+            throw new CustomerNotFoundException("User with this id does not exist");
         }
 
         //check if cart with this user already exists
@@ -54,7 +55,7 @@ public class CartService {
         logger.info("checking product with id");
         Optional<Products> optionalProduct = productDAO.findById(cartDTO.getProduct_id());
         if(!optionalProduct.isPresent()) {
-            throw new Exception("Product with this id does not exist");
+            throw new ProductNotFoundException("Product with this id does not exist");
         }
 
         List<ProductCart> productCartArr = new ArrayList<>();
@@ -71,7 +72,7 @@ public class CartService {
             for(int i = 0;i < tmp.size();i++){
                 Products product = tmp.get(i).getProduct();
                 if(product.getId() == cartDTO.getProduct_id()){
-                    throw new Exception("cart with this user and product already exists instead do a put request");
+                    throw new CartAlreadyExistsException("cart with this user and product already exists instead do a put request");
                 }
             }
             tmp.add(productCart);
@@ -89,21 +90,21 @@ public class CartService {
         return cartDAO.save(newCart);
     }
 
-    public Cart getCart(int userId) throws Exception {
+    public Cart getCart(int userId) throws CustomerNotFoundException {
         List<Cart> output = new ArrayList<>();
         Optional<Customer> optionalCustomer = customerDAO.findById(userId);
         if(!optionalCustomer.isPresent()){
-            throw new Exception("user with id does not exist");
+            throw new CustomerNotFoundException("user with id does not exist");
         }
         logger.info("user with id exists");
         List<Cart> customerCart = cartDAO.findAll();
         return cartDAO.findByCustomer(optionalCustomer.get());
     }
 
-    public Cart updateCart(int cartId, int quantity, int product_id) throws Exception {
+    public Cart updateCart(int cartId, int quantity, int product_id) throws CustomerNotFoundException, ProductNotFoundException {
         Optional<Cart> optionalCart = cartDAO.findById(cartId);
         if(!optionalCart.isPresent()){
-            throw new Exception("cart with this id does not exist");
+            throw new CustomerNotFoundException("cart with this id does not exist");
         }
         List<ProductCart> tmp =  optionalCart.get().getProduct();
         ProductCart updatedProductCart = new ProductCart();
@@ -117,13 +118,13 @@ public class CartService {
                 break;
             }
         }
-        if(!flag) throw new Exception("product with this id does not exist");
+        if(!flag) throw new ProductNotFoundException("product with this id does not exist");
 
         optionalCart.get().setProduct(tmp);
         return cartDAO.save(optionalCart.get());
     }
 
-    public void deleteCart(int cart_id) throws Exception{
+    public void deleteCart(int cart_id){
         cartDAO.deleteById(cart_id);
     }
 }

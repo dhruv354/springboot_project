@@ -32,12 +32,7 @@ public class CustomerResource {
     @PostMapping
         public ResponseEntity addCustomer(@RequestBody @Valid  Customer customer)  throws CustomerAlreadyExistsException {
             logger.info("adding customers");
-            try{
-                return new ResponseEntity(customerService.addCustomer(customer), HttpStatus.CREATED);
-            }
-            catch (CustomerAlreadyExistsException e){
-                return new ResponseEntity(e.getMessage(), HttpStatus.FORBIDDEN);
-            }
+            return new ResponseEntity(customerService.addCustomer(customer), HttpStatus.CREATED);
         }
 
         @GetMapping
@@ -52,24 +47,14 @@ public class CustomerResource {
 
         @GetMapping(value = "/username/{login_name}")
         private ResponseEntity getCustomerUsingLoginName(@PathVariable("login_name") String loginName) throws CustomerNotFoundException{
-            try{
-                return new ResponseEntity(customerService.findCustomerLikeUsername(loginName), HttpStatus.OK);
-            }
-            catch(CustomerNotFoundException customerNotFoundException){
-                return new ResponseEntity(customerNotFoundException.getMessage(), HttpStatus.NOT_FOUND);
-            }
+            return new ResponseEntity(customerService.findCustomerLikeUsername(loginName), HttpStatus.OK);
         }
 
 
 
         @GetMapping(value = "/{customerId}")
         public ResponseEntity getCustomer(@PathVariable("customerId") int customerId) throws CustomerNotFoundException{
-            try{
-                return new ResponseEntity(customerService.getCustomer(customerId), HttpStatus.OK);
-            }
-            catch (CustomerNotFoundException customerNotFoundException){
-                return new ResponseEntity(customerNotFoundException.getMessage(), HttpStatus.NOT_FOUND);
-            }
+            return new ResponseEntity(customerService.getCustomer(customerId), HttpStatus.OK);
         }
 
         @PutMapping(value = "/{customerId}")
@@ -79,13 +64,8 @@ public class CustomerResource {
 
         @DeleteMapping(value = "/{customerId}")
         public ResponseEntity deleteCustomer(@PathVariable("customerId") int customerId) throws CustomerNotFoundException{
-            try{
-                customerService.deleteCustomer(customerId);
-                return new ResponseEntity(HttpStatus.OK);
-            }
-            catch (CustomerNotFoundException customerNotFoundException){
-                return new ResponseEntity<>(customerNotFoundException.getMessage(), HttpStatus.NOT_FOUND);
-            }
+            customerService.deleteCustomer(customerId);
+            return new ResponseEntity(HttpStatus.OK);
         }
 
         @GetMapping(value = "/phone_no")

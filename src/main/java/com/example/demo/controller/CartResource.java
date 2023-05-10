@@ -1,12 +1,17 @@
 package com.example.demo.controller;
 
 import ch.qos.logback.core.encoder.EchoEncoder;
+import com.example.demo.MyExceptions.CartExceptions.CartAlreadyExistsException;
+import com.example.demo.MyExceptions.CustomerExceptions.CustomerAlreadyExistsException;
+import com.example.demo.MyExceptions.CustomerExceptions.CustomerNotFoundException;
+import com.example.demo.MyExceptions.ProductExceptions.ProductNotFoundException;
 import com.example.demo.dto.CartDTO;
 import com.example.demo.model.Cart;
 import com.example.demo.service.CartService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
@@ -24,8 +29,7 @@ public class CartResource {
 
 
     @PostMapping
-    public Cart addProduct(@RequestBody @Valid CartDTO cart) throws Exception{
-        logger.info("inside cart controller");
+    public Cart addProduct(@RequestBody @Valid CartDTO cart) throws CustomerNotFoundException, ProductNotFoundException, CartAlreadyExistsException {
         return cartService.addProduct(cart);
     }
     @GetMapping(value = "/{user_id}")

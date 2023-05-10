@@ -38,18 +38,7 @@ public class OrderResource {
     public ResponseEntity addOrder(@RequestBody OrderDTO order) throws Exception, CustomerNotFoundException, ProductNotFoundException {
         System.out.println(order);
         List<Integer> products = order.getProductIds();
-        try{
-            return new ResponseEntity(orderService.placeOrder(order), HttpStatus.OK);
-        }
-        catch(CustomerNotFoundException c){
-            return new ResponseEntity<>(c.getMessage(), HttpStatus.NOT_FOUND);
-        }
-        catch(ProductNotFoundException p){
-            return new ResponseEntity(p.getMessage(), HttpStatus.NOT_FOUND);
-        }
-        catch(Exception e){
-            return new ResponseEntity(e.getMessage(), HttpStatus.BAD_REQUEST);
-        }
+        return new ResponseEntity(orderService.placeOrder(order), HttpStatus.OK);
     }
 
     //sorting by orders and pagination
@@ -65,12 +54,8 @@ public class OrderResource {
             @RequestParam(name = "size") int size
     ) throws Exception {
         logger.info("inside get orders class");
-        try {
-            Pageable pagingSort = PageRequest.of(page, size);
-            return new ResponseEntity(orderService.getOrders2(user_id, pagingSort), HttpStatus.OK);
-        } catch (CustomerNotFoundException e) {
-            return new ResponseEntity(e.getMessage(), HttpStatus.NOT_FOUND);
-        }
+        Pageable pagingSort = PageRequest.of(page, size);
+        return new ResponseEntity(orderService.getOrders2(user_id, pagingSort), HttpStatus.OK);
     }
 
     @GetMapping(value = "/{year}")
